@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.wrapper {
+			width: 800px;
+			margin: 20px auto;
+		}
+		.operation {
+			margin-bottom: 10px;
+			text-align: center;
+			line-height: 20px;
+			font-size: 18px;
+		}
+		.operation input {
+			padding: 5px;
+			border: 1px solid deepskyblue;
+		}
+		.operation button {
+			border-radius: 3px;
+			background-color: deepskyblue;
+		}
+		.search {
+			text-align: left;
+			line-height: 20px;
+			font-size: 18px;
+		}
+		.search input {
+			padding: 5px;
+			border: 1px solid deeppink;
+		}
+		#tb{
+			width: 800px;
+			border-collapse: collapse;
+			margin: 20px auto;
+		}
+		#tb th{
+			background-color: #0094ff;
+			color:white;
+			font-size: 16px;
+			padding: 5px;
+			text-align: center;
+			border: 1px solid black;
+		}
+		#tb td{
+			padding: 5px;
+			text-align: center;
+			border: 1px solid black;
+		}
+		[ng-cloak] {
+			display: none;
+		}
+	</style>
+</head>
+<body ng-app="app" ng-controller="appCtrl" ng-cloak>
+	<div class="wrapper">
+		<div class="operation">
+			<input type="text" placeholder="请输入名称" ng-model="newName">
+			<button type="button" ng-click="add()">添加数据</button>
+		</div>
+		<div class="search">
+			<input type="text" placeHolder="请输入筛选内容" ng-model="filterKey">
+		</div>
+		<table id="tb">
+			<thead>
+				<tr>
+					<th>编号</th>
+					<th ng-click="upOrderBy('name')">名称</th>
+					<th ng-click="upOrderBy('ctime')">创建时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<hbody>
+				<!-- 没有值的时候给出提示 -->
+				<tr ng-if="!list.length">
+					<td colspan="4">列表无数据</td>
+				</tr>
+				<!-- list是一个存储商品的数组，遍历到的v是一个商品对象 -->
+				<tr ng-repeat="(i, v) in list | filter:{'name': filterKey} | orderBy:orderByKey">
+					<td>{{ i + 1 }}</td>
+					<td>{{ v.name }}</td>
+					<td>{{ v.ctime | date:'yyyy-MM-dd hh:mm:ss' }}</td>
+					<td>
+						<!-- 传id是为了调用接口删除后端数据，传下标是为了我们自己手动删除前端数据(刷新视图) -->
+						<a href="#" ng-click="del(v.id, i)">删除</a>
+					</td>
+				</tr>
+			</hbody>
+		</table>
+	</div>
+	<script src="angular.js"></script>
+	<script src="main.js"></script>
+</body>
+</html>
